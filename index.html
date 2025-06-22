@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description"
+        content="Fuel-Efficient Realtime Traffic Routing in Unregulated Multi-Agent Heterogeneous Intersections via Optimal Game-Theoretic Control">
+    <meta name="keywords" content="LivePoint, CBFs, Point Clouds">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Proofs</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/videos.css">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/images/ai.svg">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-left content">
+    
+              <h2 class="title is-3">Supplementary Material</h2>
+              <p>In this section, we show that our approach is incentive compatible, welfare maximizing, and can be computed in polynomial time.</p>
+    
+              <h3 class="title is-4">Incentive compatibility</h3>
+    
+              <div class="box">
+                <strong>Theorem (Incentive compatibility for dynamic intersections):</strong><br>
+                For each agent \( i \) for \( i=1,2,\ldots,n \) and \( n = n_1 + n_2 + n_3 + n_4 \) where \( n_j \) represents the number of vehicles on the \( j^\textrm{th} \) arm, bidding \( \boldsymbol{b}_i = \boldsymbol{\zeta}_i \) is the dominant strategy.
+              </div>
+    
+              <p><strong>Proof.</strong></p>
+              <ol>
+                <li>Use SSA to compute an ordering over all agents. But this can generate false bids: overbids and underbids.</li>
+                <li>An agent may be assigned to go second due to a higher priority vehicle.</li>
+                <li>But the latter vehicle may not even conflict with the first. Conversely, agent \( i \) might be asked to go first, risking a collision.</li>
+                <li>Therefore, it's important to identify conflicting and non-conflicting lane groups. Run SSA only in conflicting groups.</li>
+                <li>Since conflicting groups are optimized and non-conflicting ones don’t interfere, the auction is incentive-compatible.</li>
+              </ol>
+    
+              <h3 class="title is-4">Welfare maximization</h3>
+    
+              <p>The next desired property in an optimal auction is welfare maximization, which maximizes the total utility earned by every active agent.</p>
+    
+              <div class="box">
+                <strong>Theorem (Welfare maximization for dynamic intersections):</strong><br>
+                Social welfare of an auction is defined as \( \sum_i \boldsymbol{\zeta}_i \boldsymbol{\alpha}_i \). Bidding \( \boldsymbol{b}_i = \boldsymbol{\zeta}_i \) maximizes social welfare for every agent.
+              </div>
+    
+              <p><strong>Proof.</strong></p>
+              <p>
+                We can show that welfare is maximum for each set of conflicting lane group. We need to show that social welfare of the system is maximized when the welfare of each individual conflicting lane group is maximized. Our proof is based on induction.
+              </p>
+              <p>
+                <strong>Base case:</strong> \( n=1 \) reduces to the static auction case.
+                <br>
+                <strong>Inductive hypothesis:</strong> Suppose the current system consists of \( n > 1 \) conflicting groups and the social welfare is maximized.
+                <br>
+                Now add \( \lvert n+1 \rvert \) agents from the \( (n+1)^\textrm{th} \) group. The welfare of system with \( n \) conflicting groups is:
+              </p>
+    
+              <p>
+                \[
+                \sum_{i=1}^n \sum_{j=1}^{\lvert i \rvert} \zeta^i_j \alpha^i_j
+                \]
+              </p>
+    
+              <p>
+                From the hypothesis, the above is maximum. If the \( (n+1)^\textrm{th} \) conflicting group is added and optimized using SSA, the resulting total remains a sum of optimal terms. Hence, welfare is maximized.
+              </p>
+    
+              <h3 class="title is-4">Overflow prevention</h3>
+    
+              <p>We propose a strategy to address overflow by transferring a portion of the higher priority agent's bid to the lower priority agent \( i \).</p>
+    
+              <div class="box">
+                <strong>Theorem (Overflow prevention):</strong><br>
+                In a current SSA, suppose there exists \( (i,j) \in [n_k] \times [n_k], k=1,2,3,4 \), such that \( p_i > p_j \) and \( s_i[t] > s_j[t] \). Let:
+                \[
+                \boldsymbol{\hat{\zeta}}_i, \boldsymbol{\hat{\zeta}}_j = \left( \boldsymbol{\zeta}_i \xrightarrow{q} \boldsymbol{\zeta}_j \right)
+                \]
+                If:
+                \[
+                q < \boldsymbol{\zeta}_i \left( 1 - \frac{\alpha_{i+m}}{\alpha_i} \right) - \sum_{s=i}^{i+m-1} \boldsymbol{\zeta}_{s+1} \left( \frac{\alpha_s - \alpha_{s+1}}{\alpha_i} \right)
+                \]
+                then the new SSA with these modified bids is incentive compatible.
+              </div>
+    
+              <p><strong>Proof.</strong></p>
+              <p>
+                The difference in utility for agent \( i \) after transferring some valuation to agent \( j \), assuming a jump of \( m \), is:
+              </p>
+              <p>
+                \[
+                \Delta u = (v_k - q)\alpha_k - \left[ v_{k+1}(\alpha_k - \alpha_{k+1}) + v_{k+2}(\alpha_{k+1} - \alpha_{k+2}) + \ldots + v_{k+m}(\alpha_{k+m-1} - \alpha_{k+m}) \right] - v_k \alpha_{k+m}
+                \]
+              </p>
+              <p>Rewriting, \( \Delta u > 0 \) if:</p>
+              <p>
+                \[
+                v_k(\alpha_k - \alpha_{k+m}) - \sum_{j=k}^{k+m-1} v_{j+1}(\alpha_j - \alpha_{j+1}) > q\alpha_k
+                \]
+                \[
+                \Rightarrow q < v_k\left(1 - \frac{\alpha_{k+m}}{\alpha_k} \right) - \frac{1}{\alpha_k} \sum_{j=k}^{k+m-1} v_{j+1}(\alpha_j - \alpha_{j+1})
+                \]
+              </p>
+    
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- MathJax Script for Rendering LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+    </body>
+    
+    
+</html>
